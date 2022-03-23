@@ -28,7 +28,7 @@ export default function MindMap({
       appendConnection(connection)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selfRef, parentRef, containerRef])
+  }, [selfRef, parentRef, containerRef, mapTree])
 
   return (
     <div className="mindmap-node">
