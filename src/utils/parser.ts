@@ -30,17 +30,18 @@ function formatTree(tree: SimpleMarkdown.SingleASTNode) {
 }
 
 export const parseBySimpleMarkdown = (input: string): MapTree[] => {
-  const astNodes = SimpleMarkdown.defaultBlockParse(input.trim(), {
-    inline: true,
-  })
+  const astNodes = SimpleMarkdown.defaultBlockParse(
+    input.trim().replace(/^\s*\n/gm, ''),
+    {
+      inline: true,
+    }
+  )
   let result: MapTree[] = []
   astNodes.map(formatTree).forEach((t) => {
-    console.log(t)
     if (Array.isArray(t)) {
       result = [...result, ...t]
     }
   })
-  console.log('###', input, result)
 
   return result
 }

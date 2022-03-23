@@ -33,10 +33,10 @@ export default function MindMap({
   return (
     <div className="mindmap-node">
       <div ref={selfRef} className="node-label">
-        <span>{mapTree.title}</span>
+        <span>{mapTree?.title}</span>
       </div>
       <div className="mindmap-children">
-        {(mapTree.children || []).map((child, idx) => {
+        {(mapTree?.children || []).map((child, idx) => {
           return (
             <MindMap
               key={idx}

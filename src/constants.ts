@@ -1,11 +1,5 @@
-export const DEFAULT_INPUT = `- Back end tech
-  - Language
-    - Rust
-    - Go
-  - SQL
-    - SQLite
-    - MySQL
-    - Postgres
+export const DEFAULT_INPUT = `
+
 - Front end tech
   - Compiler/language
     - Elm
@@ -18,4 +12,12 @@ export const DEFAULT_INPUT = `- Back end tech
   - packager
     - Webpack
     - Snowpack
+- Back end tech
+  - Language
+    - Rust
+    - Go
+  - SQL
+    - SQLite
+    - MySQL
+    - Postgres
 `

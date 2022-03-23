@@ -37,16 +37,23 @@ textarea {
   border-radius: 0;
   border: 1px solid #e3e3e3;
   padding: 10px;
+  height: calc(100vh - 72px);
+  font-size: 18px;
+  font-family: monospace;
 }
 
 .map-wrap {
-  padding: 30px;
-  position: relative;
+  width: calc(100vw - 400px);
+  height: calc(100vh - 72px);
+  padding: 30px 100px;
+  overflow: scroll;
+  box-sizing: border-box;
 }
 
 .map-overlay {
   position: absolute;
   inset: 0;
+  height: 100%;
 }
 
 .mindmap-node {
@@ -61,7 +68,7 @@ textarea {
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;
-  padding: 0 100px;
+  padding-left: 100px;
 }
 
 .node-label {

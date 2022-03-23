@@ -49,7 +49,7 @@ export default function Editor() {
     <div className="editor-wrap">
       <textarea value={input} onChange={(e) => setInput(e.target.value)} />
       <div className="map-wrap">
-        <div>
+        <div style={{ position: 'relative' }}>
           {mapTrees.map((tree, idx) => {
             return (
               <MindMap
@@ -67,16 +67,16 @@ export default function Editor() {
               />
             )
           })}
-        </div>
 
-        <div className="map-overlay">
-          <svg ref={containerRef} width="100%" height="100%">
-            <g
-              dangerouslySetInnerHTML={{
-                __html: state.connections.join(''),
-              }}
-            ></g>
-          </svg>
+          <div className="map-overlay">
+            <svg ref={containerRef} width="100%" height="100%">
+              <g
+                dangerouslySetInnerHTML={{
+                  __html: state.connections.join(''),
+                }}
+              ></g>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
