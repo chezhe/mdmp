@@ -1,38 +1,71 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+header {
+  background: #008cd5;
+  border-bottom: 2px solid #e3e3e3;
+  padding: 5px 50px;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+main {
+  flex: 1;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.editor-wrap {
+  height: 100%;
+  background-color: antiquewhite;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+textarea {
+  width: 400px;
+  border-radius: 0;
+  border: 1px solid #e3e3e3;
+  padding: 10px;
+}
+
+.map-wrap {
+  padding: 30px;
+  position: relative;
+}
+
+.map-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.mindmap-node {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.mindmap-children {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  padding: 0 100px;
+}
+
+.node-label {
+  background-color: #3d138d;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #00873d;
+  padding: 10px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
