@@ -33,6 +33,7 @@ export default function MindMap({
       parentRef,
       containerRef,
     })
+
     if (connection) {
       appendConnection(connection)
     }
