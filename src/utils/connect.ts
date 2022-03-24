@@ -1,4 +1,5 @@
 import { RefObject } from 'react'
+import { ConnectionLineType } from '../type'
 
 type Point = number[]
 
@@ -11,32 +12,66 @@ const computeMidPoint = (fromPoint: Point, toPoint: Point) => [
     : fromPoint[1] + (toPoint[1] - fromPoint[1]) / 2,
 ]
 
-function renderLine(
-  fromPoint: Point,
-  toPoint: Point,
-  offset = 0,
-  anchor = 'center'
-) {
-  const midPoint = computeMidPoint(fromPoint, toPoint)
-  let cmds = `M ${fromPoint[0] + offset},${fromPoint[1] + offset} `
-  if (anchor === 'horizontal') {
-    cmds +=
-      `L ${midPoint[0] + offset},${fromPoint[1] + offset} ` +
-      `L ${midPoint[0] + offset},${toPoint[1] + offset} `
-  } else {
-    cmds +=
-      `L ${fromPoint[0] + offset},${midPoint[1] + offset} ` +
-      `L ${toPoint[0] + offset},${midPoint[1] + offset} `
-  }
-  cmds += `L ${toPoint[0] + offset},${toPoint[1] + offset}`
-  return cmds
+const COMMANDS = {
+  curved: (
+    fromPoint: Point,
+    toPoint: Point,
+    offset: number,
+    anchor = 'center'
+  ) => {
+    const midPoint = computeMidPoint(fromPoint, toPoint)
+    let cmds = `M ${fromPoint[0] + offset},${fromPoint[1] + offset} `
+    if (anchor === 'horizontal') {
+      cmds +=
+        `Q ${midPoint[0] + offset},${fromPoint[1] + offset} ` +
+        `${midPoint[0] + offset},${midPoint[1] + offset} `
+    } else {
+      cmds +=
+        `Q ${fromPoint[0] + offset},${midPoint[1] + offset} ` +
+        `${midPoint[0] + offset},${midPoint[1] + offset} `
+    }
+    cmds += `T ${toPoint[0] + offset},${toPoint[1] + offset}`
+    return cmds
+  },
+  direct: (
+    fromPoint: Point,
+    toPoint: Point,
+    offset: number,
+    anchor = 'center'
+  ) =>
+    `M ${fromPoint[0] + offset},${fromPoint[1] + offset} ` +
+    `L ${toPoint[0] + offset},${toPoint[1] + offset}`,
+  rectilinear: (
+    fromPoint: Point,
+    toPoint: Point,
+    offset: number,
+    anchor = 'center'
+  ) => {
+    const midPoint = computeMidPoint(fromPoint, toPoint)
+    let cmds = `M ${fromPoint[0] + offset},${fromPoint[1] + offset} `
+    if (anchor === 'horizontal') {
+      cmds +=
+        `L ${midPoint[0] + offset},${fromPoint[1] + offset} ` +
+        `L ${midPoint[0] + offset},${toPoint[1] + offset} `
+    } else {
+      cmds +=
+        `L ${fromPoint[0] + offset},${midPoint[1] + offset} ` +
+        `L ${toPoint[0] + offset},${midPoint[1] + offset} `
+    }
+    cmds += `L ${toPoint[0] + offset},${toPoint[1] + offset}`
+    return cmds
+  },
 }
 
 export default function connect({
+  connectionType,
+  isAnimate,
   selfRef,
   parentRef,
   containerRef,
 }: {
+  isAnimate?: boolean
+  connectionType?: ConnectionLineType
   selfRef: RefObject<HTMLDivElement> | null
   parentRef: RefObject<HTMLDivElement> | null
   containerRef: RefObject<SVGSVGElement> | null
@@ -78,12 +113,18 @@ export default function connect({
     }
     return `
         <path
+          class="${isAnimate ? 'animate' : ''}"
           stroke="#FD6FFF"
           stroke-width="6"
           stroke-linecap="round"
           stroke-linejoin="miter"
           fill="none"
-          d="${renderLine(fromPoint, toPoint, 0, anchor)}"
+          d="${COMMANDS[connectionType || 'curved'](
+            fromPoint,
+            toPoint,
+            0,
+            anchor
+          )}"
         />
     `
   }

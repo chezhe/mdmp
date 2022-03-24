@@ -3,6 +3,8 @@ import { DEFAULT_INPUT } from '../constants'
 import { parseBySimpleMarkdown } from '../utils/parser'
 import MindMap from './MindMap'
 import isEqual from 'lodash.isequal'
+import { ConnectionLineType } from '../type'
+import Controls from './Controls'
 
 const initialState = { connections: [] }
 
@@ -34,6 +36,10 @@ export default function Editor() {
   const containerRef = useRef<SVGSVGElement | null>(null)
   const [input, setInput] = useState(DEFAULT_INPUT)
   const [mapTrees, setMapTrees] = useState<MapTree[]>([])
+  const [lineType, setLineType] = useState<ConnectionLineType>(
+    ConnectionLineType.CURVED
+  )
+  const [isAnimate, setIsAnimate] = useState(true)
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -47,7 +53,18 @@ export default function Editor() {
 
   return (
     <div className="editor-wrap">
-      <textarea value={input} onChange={(e) => setInput(e.target.value)} />
+      <div className="textarea-wrap">
+        <textarea value={input} onChange={(e) => setInput(e.target.value)} />
+        <Controls
+          lineType={lineType}
+          setLineType={(lineType) => {
+            setLineType(lineType)
+            dispatch({ type: ConnectionAction.clear, payload: '' })
+          }}
+          isAnimate={isAnimate}
+          setIsAnimate={setIsAnimate}
+        />
+      </div>
       <div className="map-wrap">
         <div style={{ position: 'relative' }}>
           {mapTrees.map((tree, idx) => {
@@ -57,6 +74,8 @@ export default function Editor() {
                 mapTree={tree}
                 parentRef={null}
                 level={0}
+                isAnimate={isAnimate}
+                lineType={lineType}
                 containerRef={containerRef}
                 appendConnection={(connection: string) => {
                   dispatch({

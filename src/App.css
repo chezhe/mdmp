@@ -32,14 +32,40 @@ main {
   flex-flow: row nowrap;
 }
 
+.textarea-wrap {
+  height: calc(100vh - 72px);
+  background-color: white;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
 textarea {
   width: 400px;
   border-radius: 0;
   border: 1px solid #e3e3e3;
   padding: 10px;
-  height: calc(100vh - 72px);
   font-size: 18px;
   font-family: monospace;
+  flex: 1;
+}
+
+.controls {
+  padding: 20px;
+}
+
+.controls button {
+  background-color: #e3e3e3;
+  color: black;
+  border: 1px solid #008cd5;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.controls button.active {
+  background-color: #008cd5;
+  color: white;
 }
 
 .map-wrap {
@@ -79,4 +105,16 @@ textarea {
   padding: 10px 10px;
   border-radius: 4px;
   white-space: nowrap;
+}
+
+path.animate {
+  stroke-dasharray: 450;
+  stroke-dashoffset: 450;
+  animation: draw 1s linear forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
