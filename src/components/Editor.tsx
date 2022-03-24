@@ -3,7 +3,7 @@ import { DEFAULT_INPUT } from '../constants'
 import { parseBySimpleMarkdown } from '../utils/parser'
 import MindMap from './MindMap'
 import isEqual from 'lodash.isequal'
-import { ConnectionLineType } from '../type'
+import { ConnectionLineType, MapTree } from '../type'
 import Controls from './Controls'
 
 const initialState = { connections: [] }
@@ -66,7 +66,16 @@ export default function Editor() {
         />
       </div>
       <div className="map-wrap">
-        <div style={{ position: 'relative' }}>
+        <div className="maptree-wrap">
+          <div className="map-overlay">
+            <svg ref={containerRef} width="100%" height="100%">
+              <g
+                dangerouslySetInnerHTML={{
+                  __html: state.connections.join(''),
+                }}
+              ></g>
+            </svg>
+          </div>
           {mapTrees.map((tree, idx) => {
             return (
               <MindMap
@@ -74,8 +83,7 @@ export default function Editor() {
                 mapTree={tree}
                 parentRef={null}
                 level={0}
-                isAnimate={isAnimate}
-                lineType={lineType}
+                line={{ type: lineType, isAnimate, color: '' }}
                 containerRef={containerRef}
                 appendConnection={(connection: string) => {
                   dispatch({
@@ -86,16 +94,6 @@ export default function Editor() {
               />
             )
           })}
-
-          <div className="map-overlay">
-            <svg ref={containerRef} width="100%" height="100%">
-              <g
-                dangerouslySetInnerHTML={{
-                  __html: state.connections.join(''),
-                }}
-              ></g>
-            </svg>
-          </div>
         </div>
       </div>
     </div>

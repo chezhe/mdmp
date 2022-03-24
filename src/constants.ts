@@ -1,6 +1,13 @@
-export const DEFAULT_INPUT = `
+export const LINE_COLORS = [
+  '#6FFFB0',
+  '#FD6FFF',
+  '#81FCED',
+  '#00873D',
+  '#00739D',
+  '#A2423D',
+]
 
-- Front end tech
+export const DEFAULT_INPUT = `- Front end tech
   - Compiler/language
     - Elm
     - Svelte
@@ -12,6 +19,7 @@ export const DEFAULT_INPUT = `
   - packager
     - Webpack
     - Snowpack
+    - Rollup
 - Back end tech
   - Language
     - Rust

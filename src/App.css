@@ -71,9 +71,17 @@ textarea {
 .map-wrap {
   width: calc(100vw - 400px);
   height: calc(100vh - 72px);
-  padding: 30px 100px;
+  padding: 30px;
   overflow: scroll;
   box-sizing: border-box;
+}
+
+.maptree-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  padding: 100px;
 }
 
 .map-overlay {

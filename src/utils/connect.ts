@@ -1,5 +1,5 @@
 import { RefObject } from 'react'
-import { ConnectionLineType } from '../type'
+import { LineType } from '../type'
 
 type Point = number[]
 
@@ -64,14 +64,14 @@ const COMMANDS = {
 }
 
 export default function connect({
-  connectionType,
-  isAnimate,
+  anchor = 'horizontal',
+  line,
   selfRef,
   parentRef,
   containerRef,
 }: {
-  isAnimate?: boolean
-  connectionType?: ConnectionLineType
+  anchor?: 'center' | 'horizontal'
+  line: LineType
   selfRef: RefObject<HTMLDivElement> | null
   parentRef: RefObject<HTMLDivElement> | null
   containerRef: RefObject<SVGSVGElement> | null
@@ -84,7 +84,6 @@ export default function connect({
     containerRef &&
     containerRef.current
   ) {
-    const anchor = 'horizontal'
     const containerRect = containerRef.current.getBoundingClientRect()
     const fromRect = parentRef.current.getBoundingClientRect()
     const toRect = selfRef.current.getBoundingClientRect()
@@ -113,18 +112,13 @@ export default function connect({
     }
     return `
         <path
-          class="${isAnimate ? 'animate' : ''}"
-          stroke="#FD6FFF"
+          class="${line.isAnimate ? 'animate' : ''}"
+          stroke="${line.color || '#FD6FFF'}"
           stroke-width="6"
           stroke-linecap="round"
           stroke-linejoin="miter"
           fill="none"
-          d="${COMMANDS[connectionType || 'curved'](
-            fromPoint,
-            toPoint,
-            0,
-            anchor
-          )}"
+          d="${COMMANDS[line.type || 'curved'](fromPoint, toPoint, 0, anchor)}"
         />
     `
   }

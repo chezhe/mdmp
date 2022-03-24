@@ -3,3 +3,14 @@ export enum ConnectionLineType {
   DIRECT = 'direct',
   RECTILINEAR = 'rectilinear',
 }
+
+export type MapTree = {
+  title: string
+  children: MapTree[]
+}
+
+export type LineType = {
+  color: string
+  isAnimate: boolean
+  type: ConnectionLineType
+}
