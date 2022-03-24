@@ -1,7 +1,13 @@
 import { RefObject, useEffect, useRef } from 'react'
-import { LINE_COLORS } from '../constants'
+import { COLOR_PALETTES, LINE_COLORS } from '../constants'
 import { MapTree, LineType } from '../type'
 import connect from '../utils/connect'
+
+const getNodeColor = (level: number) =>
+  COLOR_PALETTES[level % COLOR_PALETTES.length]
+
+const getLineColor = (level: number, idx: number) =>
+  level === 0 ? LINE_COLORS[idx % LINE_COLORS.length] : undefined
 
 export default function MindMap({
   mapTree,
@@ -35,7 +41,11 @@ export default function MindMap({
 
   return (
     <div className="mindmap-node" data-testid={`${mapTree.title}`}>
-      <div ref={selfRef} className="node-label">
+      <div
+        ref={selfRef}
+        className="node-label"
+        style={{ backgroundColor: getNodeColor(level) }}
+      >
         <span>{mapTree.title}</span>
       </div>
       <div className="mindmap-children">
@@ -48,10 +58,7 @@ export default function MindMap({
               containerRef={containerRef}
               line={{
                 ...line,
-                color:
-                  level === 0
-                    ? LINE_COLORS[idx % LINE_COLORS.length]
-                    : line.color,
+                color: getLineColor(level, idx) || line.color,
               }}
               level={level + 1}
               appendConnection={appendConnection}
