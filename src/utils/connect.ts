@@ -1,16 +1,21 @@
 import { RefObject } from 'react'
 import { LineType } from '../type'
 
-type Point = number[]
+type Point = {
+  left: number
+  top: number
+}
 
-const computeMidPoint = (fromPoint: Point, toPoint: Point) => [
-  fromPoint[0] > toPoint[0]
-    ? toPoint[0] + (fromPoint[0] - toPoint[0]) / 2
-    : fromPoint[0] + (toPoint[0] - fromPoint[0]) / 2,
-  fromPoint[1] > toPoint[1]
-    ? toPoint[1] + (fromPoint[1] - toPoint[1]) / 2
-    : fromPoint[1] + (toPoint[1] - fromPoint[1]) / 2,
-]
+const computeMidPoint = (fromPoint: Point, toPoint: Point) => ({
+  left:
+    fromPoint.left > toPoint.left
+      ? toPoint.left + (fromPoint.left - toPoint.left) / 2
+      : fromPoint.left + (toPoint.left - fromPoint.left) / 2,
+  top:
+    fromPoint.top > toPoint.top
+      ? toPoint.top + (fromPoint.top - toPoint.top) / 2
+      : fromPoint.top + (toPoint.top - fromPoint.top) / 2,
+})
 
 const COMMANDS = {
   curved: (
@@ -20,17 +25,17 @@ const COMMANDS = {
     anchor = 'center'
   ) => {
     const midPoint = computeMidPoint(fromPoint, toPoint)
-    let cmds = `M ${fromPoint[0] + offset},${fromPoint[1] + offset} `
+    let cmds = `M ${fromPoint.left + offset},${fromPoint.top + offset} `
     if (anchor === 'horizontal') {
       cmds +=
-        `Q ${midPoint[0] + offset},${fromPoint[1] + offset} ` +
-        `${midPoint[0] + offset},${midPoint[1] + offset} `
+        `C ${midPoint.left + offset},${fromPoint.top + offset} ` +
+        `${midPoint.left + offset},${toPoint.top + offset} `
     } else {
       cmds +=
-        `Q ${fromPoint[0] + offset},${midPoint[1] + offset} ` +
-        `${midPoint[0] + offset},${midPoint[1] + offset} `
+        `C ${fromPoint.left + offset},${midPoint.top + offset} ` +
+        `${midPoint.left + offset},${midPoint.top + offset} `
     }
-    cmds += `T ${toPoint[0] + offset},${toPoint[1] + offset}`
+    cmds += ` ${toPoint.left + offset},${toPoint.top + offset}`
     return cmds
   },
   direct: (
@@ -39,8 +44,8 @@ const COMMANDS = {
     offset: number,
     anchor = 'center'
   ) =>
-    `M ${fromPoint[0] + offset},${fromPoint[1] + offset} ` +
-    `L ${toPoint[0] + offset},${toPoint[1] + offset}`,
+    `M ${fromPoint.left + offset},${fromPoint.top + offset} ` +
+    `L ${toPoint.left + offset},${toPoint.top + offset}`,
   rectilinear: (
     fromPoint: Point,
     toPoint: Point,
@@ -48,17 +53,17 @@ const COMMANDS = {
     anchor = 'center'
   ) => {
     const midPoint = computeMidPoint(fromPoint, toPoint)
-    let cmds = `M ${fromPoint[0] + offset},${fromPoint[1] + offset} `
+    let cmds = `M ${fromPoint.left + offset},${fromPoint.top + offset} `
     if (anchor === 'horizontal') {
       cmds +=
-        `L ${midPoint[0] + offset},${fromPoint[1] + offset} ` +
-        `L ${midPoint[0] + offset},${toPoint[1] + offset} `
+        `L ${midPoint.left + offset},${fromPoint.top + offset} ` +
+        `L ${midPoint.left + offset},${toPoint.top + offset} `
     } else {
       cmds +=
-        `L ${fromPoint[0] + offset},${midPoint[1] + offset} ` +
-        `L ${toPoint[0] + offset},${midPoint[1] + offset} `
+        `L ${fromPoint.left + offset},${midPoint.top + offset} ` +
+        `L ${toPoint.left + offset},${midPoint.top + offset} `
     }
-    cmds += `L ${toPoint[0] + offset},${toPoint[1] + offset}`
+    cmds += `L ${toPoint.left + offset},${toPoint.top + offset}`
     return cmds
   },
 }
@@ -87,28 +92,28 @@ export default function connect({
     const containerRect = containerRef.current.getBoundingClientRect()
     const fromRect = parentRef.current.getBoundingClientRect()
     const toRect = selfRef.current.getBoundingClientRect()
-    const fromPoint: Point = [
-      fromRect.left - containerRect.left || 0,
-      fromRect.top - containerRect.top || 0,
-    ]
-    const toPoint: Point = [
-      toRect.left - containerRect.left || 0,
-      toRect.top - containerRect.top || 0,
-    ]
+    const fromPoint = {
+      left: fromRect.left - containerRect.left || 0,
+      top: fromRect.top - containerRect.top || 0,
+    }
+    const toPoint = {
+      left: toRect.left - containerRect.left || 0,
+      top: toRect.top - containerRect.top || 0,
+    }
     if (anchor === 'horizontal') {
-      fromPoint[1] += fromRect.height / 2
-      toPoint[1] += toRect.height / 2
+      fromPoint.top += fromRect.height / 2
+      toPoint.top += toRect.height / 2
       if (fromRect.left < toRect.left) {
-        fromPoint[0] += fromRect.width
+        fromPoint.left += fromRect.width
       } else {
-        toPoint[0] += toRect.width
+        toPoint.left += toRect.width
       }
     } else {
       // center
-      fromPoint[0] += fromRect.width / 2
-      fromPoint[1] += fromRect.height / 2
-      toPoint[0] += toRect.width / 2
-      toPoint[1] += toRect.height / 2
+      fromPoint.left += fromRect.width / 2
+      fromPoint.top += fromRect.height / 2
+      toPoint.left += toRect.width / 2
+      toPoint.top += toRect.height / 2
     }
     return `
         <path

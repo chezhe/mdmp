@@ -95,7 +95,7 @@ textarea {
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 .mindmap-children {
