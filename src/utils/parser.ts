@@ -1,4 +1,7 @@
 import SimpleMarkdown from 'simple-markdown'
+import { MapTree } from '../type'
+
+const stripString = (str: string) => str.replace(/\n*/gm, '').trim()
 
 function formatTree(tree: SimpleMarkdown.SingleASTNode) {
   if (tree.type === 'list') {
@@ -7,10 +10,10 @@ function formatTree(tree: SimpleMarkdown.SingleASTNode) {
         let title = ''
         const children: any[] = []
         t.forEach((subNode) => {
-          if (subNode.type === 'text') {
-            title += formatTree(subNode).title
-          } else {
+          if (subNode.type === 'list') {
             children.push(formatTree(subNode))
+          } else {
+            title += stripString(formatTree(subNode).title)
           }
         })
         return {

@@ -84,7 +84,7 @@ textarea {
   padding: 100px;
 }
 
-.map-overlay {
+.svg-overlay {
   position: absolute;
   inset: 0;
   height: 100%;

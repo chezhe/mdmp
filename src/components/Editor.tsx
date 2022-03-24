@@ -67,7 +67,7 @@ export default function Editor() {
       </div>
       <div className="map-wrap">
         <div className="maptree-wrap">
-          <div className="map-overlay">
+          <div className="svg-overlay">
             <svg ref={containerRef} width="100%" height="100%">
               <g
                 dangerouslySetInnerHTML={{
@@ -82,9 +82,9 @@ export default function Editor() {
                 key={idx}
                 mapTree={tree}
                 parentRef={null}
+                containerRef={containerRef}
                 level={0}
                 line={{ type: lineType, isAnimate, color: '' }}
-                containerRef={containerRef}
                 appendConnection={(connection: string) => {
                   dispatch({
                     type: ConnectionAction.new,

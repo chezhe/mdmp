@@ -8,7 +8,6 @@ export default function MindMap({
   parentRef,
   containerRef,
   level,
-  index = 0,
   appendConnection,
   line,
 }: {
@@ -17,7 +16,6 @@ export default function MindMap({
   parentRef: RefObject<HTMLDivElement> | null
   containerRef: RefObject<SVGSVGElement> | null
   level: number
-  index?: number
   appendConnection: (connection: string) => void
 }) {
   const selfRef = useRef<HTMLDivElement | null>(null)
@@ -36,18 +34,18 @@ export default function MindMap({
   }, [selfRef, parentRef, containerRef, mapTree, line.isAnimate, line.type])
 
   return (
-    <div className="mindmap-node">
+    <div className="mindmap-node" data-testid={`${mapTree.title}`}>
       <div ref={selfRef} className="node-label">
-        <span>{mapTree?.title}</span>
+        <span>{mapTree.title}</span>
       </div>
       <div className="mindmap-children">
-        {(mapTree?.children || []).map((child, idx) => {
+        {(mapTree.children || []).map((child, idx) => {
           return (
             <MindMap
               key={idx}
               mapTree={child}
               parentRef={selfRef}
-              index={index}
+              containerRef={containerRef}
               line={{
                 ...line,
                 color:
@@ -55,7 +53,6 @@ export default function MindMap({
                     ? LINE_COLORS[idx % LINE_COLORS.length]
                     : line.color,
               }}
-              containerRef={containerRef}
               level={level + 1}
               appendConnection={appendConnection}
             />

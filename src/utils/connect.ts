@@ -112,6 +112,7 @@ export default function connect({
     }
     return `
         <path
+          role="connection"
           class="${line.isAnimate ? 'animate' : ''}"
           stroke="${line.color || '#FD6FFF'}"
           stroke-width="6"
