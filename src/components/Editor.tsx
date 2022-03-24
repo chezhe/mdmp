@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { DEFAULT_INPUT } from '../constants'
-import { parseBySimpleMarkdown } from '../utils/parser'
+import { parseBySimpleMarkdown, parseByCustom } from '../utils/parser'
 import MindMap from './MindMap'
 import isEqual from 'lodash.isequal'
 import { ConnectionLineType, MapTree } from '../type'
@@ -44,12 +44,14 @@ export default function Editor() {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    const newMapTrees = parseBySimpleMarkdown(input)
+    const newMapTrees = parseByCustom(input)
     if (!isEqual(newMapTrees, mapTrees)) {
       setMapTrees(newMapTrees)
       dispatch({ type: ConnectionAction.clear, payload: '' })
     }
   }, [input, mapTrees])
+
+  // console.log(isEqual(parseByCustom(input), mapTrees))
 
   return (
     <div className="editor-wrap">

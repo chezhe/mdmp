@@ -48,3 +48,73 @@ export const parseBySimpleMarkdown = (input: string): MapTree[] => {
 
   return result
 }
+
+type MapTreeTemp = {
+  title: string
+  children: MapTreeTemp[]
+  whitespace: number
+  parent?: MapTreeTemp
+}
+
+const closetParent = (node: MapTreeTemp, target?: MapTreeTemp) => {
+  let _parent = target
+  while (_parent && node.whitespace < _parent.whitespace) {
+    _parent = _parent.parent!
+  }
+  return _parent?.parent
+}
+
+export const parseByCustom = (input: string) => {
+  const lines = input.split('\n')
+  const _result: MapTreeTemp[] = []
+  let prevNode = null
+  for (let index = 0; index < lines.length; index++) {
+    const result = /^\s{0,}-\s{0,}.*/g.exec(lines[index])
+    if (result) {
+      const [left, right] = result[0].split('-')
+      const whitespace = left.length
+      const title = right.trim()
+
+      const current: MapTreeTemp = {
+        title,
+        children: [],
+        whitespace,
+      }
+      console.log(lines[index], prevNode, current)
+
+      if (!prevNode) {
+        _result.push(current)
+      } else if (current.whitespace === prevNode.whitespace) {
+        current.parent = prevNode.parent
+        if (prevNode.parent) {
+          prevNode.parent?.children.push(current)
+        } else {
+          _result.push(current)
+        }
+      } else if (current.whitespace > prevNode.whitespace) {
+        current.parent = prevNode
+        prevNode.children.push(current)
+      } else if (current.whitespace < prevNode.whitespace) {
+        const closet = closetParent(current, prevNode.parent)
+        console.log('###', closet)
+        if (closet) {
+          current.parent = closet
+          closet.children.push(current)
+        } else {
+          _result.push(current)
+        }
+      }
+      prevNode = current
+    }
+  }
+  return cleanMapTreeTemp(_result)
+}
+
+function cleanMapTreeTemp(trees: MapTreeTemp[]): MapTree[] {
+  return trees.map((t) => {
+    return {
+      title: t.title,
+      children: cleanMapTreeTemp(t.children),
+    }
+  })
+}
