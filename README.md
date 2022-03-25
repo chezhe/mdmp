@@ -1,5 +1,7 @@
 # MDMP, aka MarkDown2MindmaP
 
+## About
+
 You can convert markdown list to mindmap.
 
 1. First, use [simple-markdown](https://github.com/Khan/simple-markdown) to parse markdown into a tree structure.
@@ -28,3 +30,17 @@ You can
 - rectilinear
 
 4. control the line if animated
+
+## Test
+
+run
+
+```
+yarn test
+```
+
+to test the parse function and the render function.
+
+## About parse
+
+on branch `feature/parse`, I wrote a custom parse function to parse markdown into a tree structure. It's simple and fast, but only works with list, not like `simple-markdown`.
